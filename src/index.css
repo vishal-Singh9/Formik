@@ -1,0 +1,132 @@
+/* Styles for form container */
+
+body{
+  background-image: url("/Users/indianic/Desktop/formikk/src/background-img/bkk.jpg");
+  background-size: cover;
+}
+.form-container {
+  max-width: 400px;
+  margin: 50px auto;
+  position: absolute;
+  padding: 20px;
+  border: 1px solid #12d10c;
+  border-radius: 5px;
+  background-color: #19d332;
+  display: flex;
+  align-items: center;
+
+}
+
+/* Styles for form fields */
+.form-field {
+  margin-bottom: 20px;
+}
+
+/* Styles for form field label */
+.form-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.box{
+  background:rgb(155 202 70);;
+  width: 400px;
+  min-height: 500px;
+  padding: 10px;
+  border: 8px solid rgb(10, 6, 6);
+  border-radius: 20px;
+}
+.box-2{
+  
+ 
+  background: rgb(187, 102, 179);
+  width: 400px;
+  min-height: 500px;
+  padding: 10px;
+  border: 8px solid rgb(9, 1, 1);
+  border-radius: 20px;
+  margin-left: 40%;
+  
+
+}
+.btn-2{
+  display: flex;
+  gap: 20px;
+}
+.btn-3{
+  margin-top: 10px;
+}
+/* Styles for form field input */
+.form-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  
+
+}
+#submit{
+  
+    padding: 15px;
+    border-radius: 10px;
+    margin: 10px;
+   
+    border: none;
+    color: white;
+    cursor: pointer;
+    background-color: blue;
+    width: 22%;
+    font-size: 16px;
+  }
+
+  .btn-6{
+    padding: 15px;
+    border-radius: 10px;
+    margin: 10px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    background-color: blue;
+    width: 35%;
+    font-size: 16px;
+  }
+
+
+/* Styles for buttons */
+.button {
+  margin: 1rem;
+  margin-right: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+/* Styles for submitted data section */
+.submitted-data {
+  margin-top: 20px;
+}
+#submit{
+  margin-left: 10px;
+}
+
+.submitted-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.submitted-item p {
+  margin: 0;
+}
+
+.submitted-item button {
+  margin-left: 10px;
+}
