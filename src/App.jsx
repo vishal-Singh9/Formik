@@ -20,6 +20,7 @@ const validationSchema = Yup.object({
         .oneOf([true], "Must be 18 or older")
         .required("Checkbox is required"),
       age: Yup.string().required("Age is required"),
+      profilePic: Yup.mixed().required("Profile Picture is required"),
     })
   ),
 });
@@ -34,10 +35,26 @@ const Dashboard = () => {
       gender: "",
       isAbove18: "",
       age: "",
+      profilePic: null,
     },
   ];
 
   const [submittedValues, setSubmittedValues] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+
+  const handlePreview = (file, index) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewImage(reader.result);
+      
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const closePreview = () => {
+    setPreviewImage(null);
+ 
+  };
 
   return (
     <div>
@@ -47,9 +64,11 @@ const Dashboard = () => {
         onSubmit={(values, { resetForm }) => {
           setSubmittedValues(values);
           resetForm();
+          setPreviewImage(null);
+         
         }}
       >
-        {({ values }) => (
+        {({ values, setFieldValue }) => (
           <Form>
             <FieldArray
               name="details"
@@ -61,6 +80,53 @@ const Dashboard = () => {
                         <center>SURVEY FORM</center>
                       </h1>
                       <hr />
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <div style={{ marginRight: "20px" }}>
+                          {values.details[index].profilePic && (
+                            <img
+                              src={URL.createObjectURL(
+                                values.details[index].profilePic
+                              )}
+                              alt="Profile"
+                              style={{
+                                width: "50px",
+                                height: "50px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                handlePreview(
+                                  values.details[index].profilePic,
+                                  index
+                                )
+                              }
+                            />
+                          )}
+                        </div>
+                        <div>
+                          <label htmlFor={`details.${index}.profilePic`}>
+                            Profile Picture:
+                          </label>
+                          <input
+                            type="file"
+                            name={`details.${index}.profilePic`}
+                            onChange={(event) => {
+                              const file = event.currentTarget.files[0];
+                              setFieldValue(
+                                `details.${index}.profilePic`,
+                                file
+                              );
+                            }}
+                          />
+                          <br />
+                          <ErrorMessage
+                            name={`details.${index}.profilePic`}
+                            component="div"
+                            style={{ color: "red" }}
+                          />
+                          <br />
+                        </div>
+                      </div>
+                      <br />
                       <label htmlFor={`details.${index}.firstName`}>
                         First Name:
                       </label>
@@ -77,14 +143,12 @@ const Dashboard = () => {
                       </label>
                       <Field type="text" name={`details.${index}.lastName`} />
                       <br />
-
                       <ErrorMessage
                         name={`details.${index}.lastName`}
                         component="div"
                         style={{ color: "red" }}
                       />
                       <br />
-
                       <label htmlFor={`details.${index}.email`}>Email:</label>
                       <Field type="email" name={`details.${index}.email`} />
                       <br />
@@ -94,7 +158,6 @@ const Dashboard = () => {
                         style={{ color: "red" }}
                       />
                       <br />
-
                       <label htmlFor={`details.${index}.password`}>
                         Password:
                       </label>
@@ -103,14 +166,12 @@ const Dashboard = () => {
                         name={`details.${index}.password`}
                       />
                       <br />
-
                       <ErrorMessage
                         name={`details.${index}.password`}
                         component="div"
                         style={{ color: "red" }}
                       />
                       <br />
-
                       <label htmlFor={`details.${index}.isAbove18`}>
                         Are you above 18?
                       </label>
@@ -119,14 +180,12 @@ const Dashboard = () => {
                         name={`details.${index}.isAbove18`}
                       />
                       <br />
-
                       <ErrorMessage
                         name={`details.${index}.isAbove18`}
                         component="div"
                         style={{ color: "red" }}
                       />
                       <br />
-
                       <label htmlFor={`details.${index}.age`}>Age:</label>
                       <Field as="select" name={`details.${index}.age`}>
                         <option value="" label="Select Age" />
@@ -137,14 +196,12 @@ const Dashboard = () => {
                         <option value="60+" label="60+" />
                       </Field>
                       <br />
-
                       <ErrorMessage
                         name={`details.${index}.age`}
                         component="div"
                         style={{ color: "red" }}
                       />
                       <br />
-
                       <label htmlFor={`details.${index}.gender`}>Gender:</label>
                       <label>
                         {" "}
@@ -155,7 +212,6 @@ const Dashboard = () => {
                         />
                         Male
                       </label>
-
                       <label>
                         {" "}
                         <Field
@@ -171,16 +227,13 @@ const Dashboard = () => {
                         component="div"
                         style={{ color: "red" }}
                       />
-                      <br /> <br />
                       <br />
-                      { (
+                      {index > 0 && (
                         <button
                           className="btn-6"
                           type="button"
                           style={{ marginRight: "10px" }}
-                          onClick={() => {if (values.details.length > 1) {
-                            arrayHelpers.remove(index);
-                          }}}
+                          onClick={() => arrayHelpers.remove(index)}
                         >
                           Remove Form
                         </button>
@@ -193,6 +246,11 @@ const Dashboard = () => {
                             firstName: "",
                             lastName: "",
                             email: "",
+                            password: "",
+                            gender: "",
+                            isAbove18: "",
+                            age: "",
+                            profilePic: null,
                           })
                         }
                       >
@@ -201,7 +259,6 @@ const Dashboard = () => {
                     </div>
                   ))}
                   <br />
-
                   <div>
                     <button type="submit" id="submit">
                       Submit
@@ -214,6 +271,21 @@ const Dashboard = () => {
         )}
       </Formik>
 
+      {previewImage && (
+        <div className="preview-overlay" onClick={closePreview}>
+          <div className="preview-container">
+            <button className="close-button" onClick={closePreview}>
+              &times;
+            </button>
+            <img
+              src={previewImage}
+              alt="Profile Preview"
+              className="preview-image"
+            />
+          </div>
+        </div>
+      )}
+
       {submittedValues && (
         <div className="box-2">
           <h2>
@@ -223,6 +295,14 @@ const Dashboard = () => {
           <ul>
             {submittedValues.details.map((detail, index) => (
               <div key={index}>
+                {detail.profilePic && (
+                  <img
+                    src={URL.createObjectURL(detail.profilePic)}
+                    alt="Profile"
+                    style={{ width: "50px", height: "50px" }}
+                  />
+                )}
+
                 <li>
                   <p>First Name: {detail.firstName}</p>
                 </li>
@@ -230,16 +310,16 @@ const Dashboard = () => {
                   <p>Last Name: {detail.lastName}</p>
                 </li>
                 <li>
-                  <p>Email:{detail.email}</p>
+                  <p>Email: {detail.email}</p>
                 </li>
                 <li>
-                  <p>Password:{detail.password}</p>
+                  <p>Password: {detail.password}</p>
                 </li>
                 <li>
-                  <p>Age:{detail.age}</p>
+                  <p>Age: {detail.age}</p>
                 </li>
                 <li>
-                  <p>Gender:{detail.gender}</p>
+                  <p>Gender: {detail.gender}</p>
                 </li>
               </div>
             ))}
@@ -251,6 +331,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-
-
